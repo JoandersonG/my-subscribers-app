@@ -6,9 +6,10 @@
     <string name="subscriber_name_hint">Subscriber\'s name</string>
     <string name="subscriber_button">Add</string>
     <string name="subscriber_title">Subscriber</string>
-
     <string name="subscriber_inserted_successfully">Subscriber was successfully inserted</string>
     <string name="subscriber_error_to_insert">There was an error when inserting this subscriber</string>
     <string name="description_add_subscriber">Add subscriber</string>
 
+    <!--SubscriberListFragment-->
+    <string name="subscriberList_title">Subscriber List</string>
 </resources>
