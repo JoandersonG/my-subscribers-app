@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.joanderson.mysubscribers.R
 import com.joanderson.mysubscribers.data.db.AppDatabase
 import com.joanderson.mysubscribers.databinding.SubscriberListFragmentBinding
+import com.joanderson.mysubscribers.extension.navigateWithAnimations
 import com.joanderson.mysubscribers.repository.DatabaseDataSource
 import com.joanderson.mysubscribers.repository.SubscriberRepository
 
@@ -57,7 +58,7 @@ class SubscriberListFragment : Fragment() {
 
     private fun configureViewListeners() {
         binding.fabAddSubscriber.setOnClickListener {
-            findNavController().navigate(R.id.subscriberFragment)
+            findNavController().navigateWithAnimations(R.id.subscriberFragment)
         }
     }
 
