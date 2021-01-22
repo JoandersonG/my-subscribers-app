@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.joanderson.mysubscribers.data.db.AppDatabase
 import com.joanderson.mysubscribers.databinding.SubscriberFragmentBinding
@@ -55,6 +56,7 @@ class SubscriberFragment : Fragment() {
                 is SubscriberViewModel.SubscriberState.Inserted -> {
                     clearFields()
                     hideKeyboard()
+                    findNavController().popBackStack()
                 }
             }
         }
