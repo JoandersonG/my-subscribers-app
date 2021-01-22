@@ -12,9 +12,10 @@ class SubscriberListAdapter(
 ) :
     RecyclerView.Adapter<SubscriberListAdapter.SubscriberListViewHolder>() {
 
+    var onItemClick: ((entity: SubscriberEntity) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriberListViewHolder {
-        //val view = LayoutInflater.from(parent.context).inflate(R.layout.subscriber_item, parent, false)
-        return SubscriberListViewHolder.from(parent)
+        return SubscriberListViewHolder.from(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: SubscriberListViewHolder, position: Int) {
@@ -23,32 +24,28 @@ class SubscriberListAdapter(
 
     override fun getItemCount() = subscribers.size
 
-    class SubscriberListViewHolder private constructor(private val binding: SubscriberItemBinding)
+    class SubscriberListViewHolder private constructor(
+            private val binding: SubscriberItemBinding,
+            private val onItemClick: ((entity: SubscriberEntity) -> Unit)?
+            )
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(subscriber: SubscriberEntity) {
             binding.subscriber = subscriber
             // make sure to include this so your view will be updated
             binding.executePendingBindings()
+            itemView.setOnClickListener {
+                onItemClick?.invoke(subscriber )
+            }
         }
 
         companion object {
-            fun from(parent: ViewGroup): SubscriberListViewHolder {
+            fun from(parent: ViewGroup, onItemClick: ((entity: SubscriberEntity) -> Unit)?): SubscriberListViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = SubscriberItemBinding.inflate(layoutInflater, parent, false)
 
-                return SubscriberListViewHolder(binding)
+                return SubscriberListViewHolder(binding, onItemClick)
             }
         }
     }
-
-//    class SubscriberListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        private val textViewSubscribeName: TextView = itemView.text_subscriber_name
-//        private val textViewSubscribeEmail: TextView = itemView.text_subscriber_email
-//
-//        fun bindView(subscriber: SubscriberEntity) {
-//            textViewSubscribeName.text = subscriber.name
-//            textViewSubscribeEmail.text = subscriber.email
-//        }
-//    }
 }

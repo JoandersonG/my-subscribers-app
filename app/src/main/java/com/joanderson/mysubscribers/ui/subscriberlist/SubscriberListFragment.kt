@@ -48,7 +48,13 @@ class SubscriberListFragment : Fragment() {
 
     private fun observeViewModelEvents() {
         viewModel.allSubscribersEvent.observe(viewLifecycleOwner) { allSubscribers ->
-            val subscriberListAdapter = SubscriberListAdapter(allSubscribers)
+            val subscriberListAdapter = SubscriberListAdapter(allSubscribers).apply {
+                onItemClick = { subscriber ->
+                    val directions = SubscriberListFragmentDirections
+                            .actionSubscriberListFragmentToSubscriberFragment(subscriber)
+                    findNavController().navigateWithAnimations(directions)
+                }
+            }
             binding.recyclerSubscribers.run {
                 setHasFixedSize(true)
                 adapter = subscriberListAdapter
@@ -63,7 +69,9 @@ class SubscriberListFragment : Fragment() {
 
     private fun configureViewListeners() {
         binding.fabAddSubscriber.setOnClickListener {
-            findNavController().navigateWithAnimations(R.id.subscriberFragment)
+            findNavController().navigateWithAnimations(
+                R.id.action_subscriberListFragment_to_subscriberFragment
+            )
         }
     }
 

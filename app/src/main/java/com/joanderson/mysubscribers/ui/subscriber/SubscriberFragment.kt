@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.joanderson.mysubscribers.R
 import com.joanderson.mysubscribers.data.db.AppDatabase
 import com.joanderson.mysubscribers.databinding.SubscriberFragmentBinding
 import com.joanderson.mysubscribers.extension.hideKeyboard
@@ -21,6 +23,7 @@ class SubscriberFragment : Fragment() {
 
     private var _binding: SubscriberFragmentBinding? = null
     private val binding get() = _binding!!
+    private val args: SubscriberFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,15 +48,25 @@ class SubscriberFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        args.subscriber?.let { subscriber ->
+            binding.buttonSubscriber.text = getString(R.string.subscriber_button_update)
+            binding.inputName.setText(subscriber.name)
+            binding.inputEmail.setText(subscriber.email)
+        }
+
         observeEvents()
         setListeners()
-
     }
 
     private fun observeEvents() {
         viewModel.subscriberStateEventData.observe(viewLifecycleOwner) { subscriberState ->
             when (subscriberState) {
                 is SubscriberViewModel.SubscriberState.Inserted -> {
+                    clearFields()
+                    hideKeyboard()
+                    findNavController().popBackStack()
+                }
+                is SubscriberViewModel.SubscriberState.Updated -> {
                     clearFields()
                     hideKeyboard()
                     findNavController().popBackStack()
@@ -81,7 +94,8 @@ class SubscriberFragment : Fragment() {
          binding.buttonSubscriber.setOnClickListener {
              val name = binding.inputName.text.toString()
              val email = binding.inputEmail.text.toString()
-             viewModel.addSubscriber(name, email)
+             viewModel.addOrUpdateSubscriber(name, email, args.subscriber?.id ?: 0)
+
          }
     }
 
